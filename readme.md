@@ -10,8 +10,8 @@ luno_streams <api_key> <api_secret> [<pairs>,]
 
 Extras:
 
-`--server` - run a websocket server that sends updates to
-`--app` - print a local file URL to open in your browser
+* `--server` - run a websocket server that sends updates to
+* `--app` - print a local file URL to open in your browser
 
 Run `luno_streams --help` to view all commands
 

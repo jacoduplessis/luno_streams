@@ -22,7 +22,7 @@ def main():
     parser.add_argument('--port', default=8010, help='Server port.')
     parser.add_argument('--address', default='127.0.0.1', help='Server address.')
     parser.add_argument('--depth', default=0, type=int, help='Maximum amount of orders to display on each side of the order book.')
-    parser.add_argument('--app', default=False, action='store_true')
+    parser.add_argument('--app', default=False, action='store_true', help='Print URL of local app to display order books.')
     options = parser.parse_args()
 
     pairs = options.pairs
@@ -54,8 +54,11 @@ def main():
     tasks = [loop.create_task(run_updater(code)) for code in pairs]
 
     if options.app:
-        url = 'file://' + str(pathlib.Path(__file__).parent / 'app.html')
-        print(f'Open the following file in your browser: {url}')
+        if not run_server:
+            print('You can only use the app if you are running the websocket server with --server.')
+        else:
+            url = 'file://' + str(pathlib.Path(__file__).parent / 'app.html')
+            print(f'Open the following file in your browser: {url}')
 
     if run_server:
         consumer = get_consumer(pairs, queues, options.depth)
