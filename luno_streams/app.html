@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Luno Websockets</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+
+<div id="app" class="container-fluid">
+  <input v-model="pair" placeholder="pair code eg. XBTZAR">
+  <input v-model="port" placeholder="websocket port eg. 8000">
+  <button @click="connect" v-if="!connected" class="btn btn-primary btn-sm">Connect</button>
+  <button @click="disconnect" v-if="connected" class="btn btn-danger btn-sm">Disconnect</button>
+  <span>Connected: {{ connected }}</span>
+  <div>
+    Spread: {{ spread }}
+  </div>
+  <div class="row">
+    <div class="col">
+      <h3>Bids</h3>
+      <table class="table table-bordered table-hover table-sm">
+        <thead>
+        <tr>
+          <th>Price</th>
+          <th>Volume</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="[price, volume] in bids" :key="price">
+          <td>{{ price }}</td>
+          <td>{{ volume }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col">
+      <h3>Asks</h3>
+      <table class="table table-bordered table-hover table-sm">
+        <thead>
+        <tr>
+          <th>Price</th>
+          <th>Volume</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr v-for="[price, volume] in asks" :key="price">
+          <td>{{ price }}</td>
+          <td>{{ volume }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col">
+      <h3>Trades</h3>
+      <table class="table table-hover table-bordered table-sm">
+        <thead>
+        <tr>
+          <th>Time</th>
+          <th>Type</th>
+          <th>Price</th>
+          <th>Volume</th>
+
+          <th>Taker</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="trade in trades" :class="trade.type === 'sell' ? 'table-danger' : 'table-success'">
+          <td>{{ trade.time }}</td>
+          <td>{{ trade.type }}</td>
+          <td>{{ trade.price }}</td>
+          <td>{{ trade.base }}</td>
+          <td>{{ trade.taker_order_id }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.15/vue.min.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data() {
+      return {
+        bids: [[0, 0]],
+        asks: [[0, 0]],
+        trades: [],
+        title: '...',
+        pair: '',
+        port: 8010,
+        connected: false,
+      }
+    },
+    computed: {
+      url() {
+        return `ws://localhost:${this.port}/${this.pair}`
+      },
+      spread() {
+        return this.asks[0][0] - this.bids[0][0]
+      }
+    },
+    methods: {
+      connect() {
+        this.title = this.pair + ' Order Book'
+        this.ws = new WebSocket(this.url)
+        this.ws.onopen = () => {
+          console.log('Connected to websocket.');
+          this.connected = true
+        }
+        this.ws.onmessage = event => {
+          const msg = JSON.parse(event.data)
+          console.log(msg)
+          const trades = msg.trades.map(t => {
+            t.time = new Date().toTimeString().substr(0,8)
+            return t
+          })
+          if (msg.trades) this.trades = trades.concat(this.trades)
+          if (msg.bids) this.bids = msg.bids
+          if (msg.asks) this.asks = msg.asks
+        }
+        this.ws.onclose = () => {
+          this.connected = false
+        }
+      },
+      disconnect() {
+        this.ws.close()
+        console.log('Disconnected from websocket.')
+      }
+    },
+
+  })
+
+
+</script>
+</body>
+</html>
