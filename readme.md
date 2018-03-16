@@ -5,6 +5,8 @@ Python library to connect to the Luno API with websockets.
 Includes example app to replicate the Luno Exchange interface as well 
 as proxy server for easy consumption of practical market data.
 
+Requires Python 3.6+.
+
 Luno reference: https://www.luno.com/en/api#streaming
 
 ## Install
@@ -89,12 +91,17 @@ A trade is a dict with the following keys:
 luno_streams api_key api_secret pairs [pairs ...]
 ```
 
-
 Extras:
 
 * `--app` - Serve a single page javascript app to render live order books
 * `--depth` - specify an integer `n` to trim the order book to at most `n` orders on each side
 
-Run `luno_streams --help` to view all commands.
+Run `luno_streams --help` to view all options.
 
 It is highly recommended to use the `--depth` option, usually somewhere between 100 - 200 is a good choice.
+
+## Example app
+
+An example app made with [Vue](https://vuejs.org) is included. See `app.html` in the source code
+and run it using the `--app` flag when running the server. This will serve the `app.html` in a 
+new thread.
