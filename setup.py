@@ -9,11 +9,11 @@ setup(
     description='Luno client for the streaming API.',
     url=github,
     keywords='luno websockets',
-    project_urls={
-        'Source': github,
-        'Tracker': f'{github}/issues',
+    include_package_data=True,
+    package_data={
+      'luno_streams': ['app.html']
     },
-    version='0.1.0',
+    version='0.1.1',
     packages=['luno_streams'],
     install_requires=[
         'websockets'
