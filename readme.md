@@ -7,6 +7,12 @@ as proxy server for easy consumption of practical market data.
 
 Luno reference: https://www.luno.com/en/api#streaming
 
+## Install
+
+```
+pip install luno_streams
+```
+
 ## Example usage
 
 ```python
