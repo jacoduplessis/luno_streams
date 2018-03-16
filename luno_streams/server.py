@@ -30,7 +30,6 @@ def get_consumer(pairs, queues, depth):
                 data['bids'] = data['bids'][:depth]
                 data['asks'] = data['asks'][:depth]
 
-            logger.debug('sending message')
             message = json.dumps(data, default=decimal_default)
             await websocket.send(message)
 

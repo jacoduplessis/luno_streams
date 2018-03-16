@@ -1,17 +1,17 @@
 import argparse
 import asyncio
-import websockets
-from .updater import Updater
-from .server import get_consumer
-from collections import defaultdict
 import logging
-
 import threading
+from collections import defaultdict
+
+import websockets
+
 from .app import get_server
+from .server import get_consumer
+from .updater import Updater
 
 logging.basicConfig()
 logger = logging.getLogger('luno_streams')
-logger.setLevel(logging.DEBUG)
 
 
 def main():
@@ -20,13 +20,15 @@ def main():
     parser.add_argument('api_key', type=str, help='API Key ID.')
     parser.add_argument('api_secret', type=str, help='API Key Secret.')
     parser.add_argument('pairs', type=str, nargs='+', help='Pairs to subscribe to, e.g. XBTZAR.')
-    parser.add_argument('--port', default=8010, help='Server port [default 8010].')
+    parser.add_argument('--log-level', '-l', default='WARNING', help='Log level [default WARNING]')
+    parser.add_argument('--port', '-p', default=8010, help='Server port [default 8010].')
     parser.add_argument('--address', default='', help='Server address [default ''].')
-    parser.add_argument('--depth', default=0, type=int, help='Maximum amount of orders to display on each side of the order book.')
+    parser.add_argument('--depth', '-d', default=0, type=int,help='Maximum amount of orders to display on each side of the order book.')
     parser.add_argument('--app', default=False, action='store_true', help='Run example app (serves single html file).')
     parser.add_argument('--app-port', default=8011, type=int, help='Port on which to run example app [default 8011].')
     options = parser.parse_args()
 
+    logger.setLevel(options.log_level)
     pairs = list(map(str.lower, options.pairs))
     hooks = defaultdict(list)
     queues = {}
