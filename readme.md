@@ -34,7 +34,7 @@ loop = asyncio.get_event_loop()
 loop.run_until_complete(updater.run())
 ```
 
-See the `cli.py` file for example of running multiple websocket connections in parallel, as well
+See the `cli.py` file for an example of running multiple websocket connections in parallel, as well
 as how hooks are used to store results and proxy to other websockets.
 
 ## Hooks
@@ -92,7 +92,7 @@ luno_streams api_key api_secret pairs [pairs ...]
 
 Extras:
 
-* `--app` - print a local file URL to open in your browser
+* `--app` - Serve a single page javascript app to render live order books
 * `--depth` - specify an integer `n` to trim the order book to at most `n` orders on each side
 
 Run `luno_streams --help` to view all commands.
