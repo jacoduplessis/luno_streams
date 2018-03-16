@@ -27,11 +27,11 @@ updater = Updater(
     pair_code='XBTZAR',
     api_key='123',
     api_secret='456',
-    hooks=[print_it], # list of functions/coroutines to be executed when order book is updated
+    hooks=[print_it],
 )
 
 loop = asyncio.get_event_loop()
-loop.run_until_complete(updater.run)
+loop.run_until_complete(updater.run())
 ```
 
 See the `cli.py` file for example of running multiple websocket connections in parallel, as well
