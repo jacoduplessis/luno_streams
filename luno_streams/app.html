@@ -112,12 +112,11 @@
         }
         this.ws.onmessage = event => {
           const msg = JSON.parse(event.data)
-          console.log(msg)
           const trades = msg.trades.map(t => {
             t.time = new Date().toTimeString().substr(0,8)
             return t
           })
-          if (msg.trades) this.trades = trades.concat(this.trades)
+          if (msg.trades) this.trades = trades.concat(this.trades).slice(0, 100) // do not allow to grow infinitely
           if (msg.bids) this.bids = msg.bids
           if (msg.asks) this.asks = msg.asks
         }

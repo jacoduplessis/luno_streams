@@ -18,7 +18,7 @@ def get_consumer(pairs, queues, depth):
     async def consumer(websocket, path):
 
         logger.debug(f'New connection at "{path}".')
-        code = path.strip('/')
+        code = path.strip('/').lower()
         if code not in pairs:
             await websocket.send('Invalid path')
             await websocket.close()
