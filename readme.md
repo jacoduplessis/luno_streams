@@ -1,13 +1,11 @@
 # Luno Streams
 
-Python library to connect to the Luno API with websockets. 
+Python library to connect to the [Luno Streaming API](https://www.luno.com/en/api#streaming) with websockets. 
 
 Includes example app to replicate the Luno Exchange interface as well 
 as proxy server for easy consumption of practical market data.
 
 Requires Python 3.6+.
-
-Luno reference: https://www.luno.com/en/api#streaming
 
 ## Install
 
@@ -36,21 +34,23 @@ loop = asyncio.get_event_loop()
 loop.run_until_complete(updater.run())
 ```
 
-See the `cli.py` file for an example of running multiple websocket connections in parallel, as well
-as how hooks are used to store results and proxy to other websockets.
+See `cli.py` in the source code for an example of running multiple 
+websocket connections in parallel, as well as how hooks are used 
+to store results and proxy to other websockets.
 
 ## Hooks
 
 The `Updater` accepts a `hooks` parameter - a list of functions or coroutines that will be called
-whenever the order book is updated.
+whenever the order book is updated. This is where you will probably add some code to store
+the data in redis or do some calculations and make some API calls. 
 
 Each hook will receive two arguments:
 
-1. a consolidated order book, which groups all orders by price. See **Order Book Structure** below.
-2. a list of trades that were performed during the last update. See **Trade Structure** below.
+1. a consolidated order book, which groups all orders by price. See [Order Book Structure](#order-book-structure) below.
+2. a list of trades that were performed during the last update. See [Trade Structure](#trade-structure) below.
 
 Scan the list of trades if you need to determine whether your order was fulfilled without making 
-an API call.
+an API call. Pro tip: if you have an open order, you are a `maker`.
 
 ## Order Book Structure
 
@@ -75,7 +75,7 @@ Example:
 }
 ```
 
-# Trade Structure
+## Trade Structure
 
 A trade is a dict with the following keys: 
 
