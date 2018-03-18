@@ -9,6 +9,8 @@ import websockets
 
 logger = logging.getLogger('luno_streams')
 
+class BackoffException(Exception):
+    pass
 
 class Updater:
 
@@ -23,23 +25,29 @@ class Updater:
         self.hooks = hooks or []
         self.time_last_connection_attempt = None  # used for backoff
 
+    def check_backoff(self):
+        if self.time_last_connection_attempt is not None:
+            delta = time.time() - self.time_last_connection_attempt
+            if delta < 10:
+                raise BackoffException()
+
     async def connect(self):
 
         if self.websocket is not None:  # reconnecting
             logger.info(f'[{self.pair_code}] Closing existing connection...')
             await self.websocket.ws_client.close()
-
-        # do not attempt connection more that once every 10 seconds
-        if self.time_last_connection_attempt is not None:
-            delta = time.time() - self.time_last_connection_attempt
-            if delta < 10:
-                logger.info('Waiting 10 seconds before attempting connection...')
-                await asyncio.sleep(10)
+        try:
+            self.check_backoff()
+        except BackoffException:
+            # do not attempt connection more that once every 10 seconds
+            logger.info('Waiting 10 seconds before attempting to connect...')
+            await asyncio.sleep(10)
         self.time_last_connection_attempt = time.time()
 
         url = f'wss://ws.luno.com/api/1/stream/{self.pair_code}'
         logger.info(f'[{self.pair_code}] Connecting to {url}...')
         self.websocket = await websockets.connect(url)
+        # no error handling - if connection fails, let it raise websocket Exception
         await self.websocket.send(json.dumps({
             'api_key_id': self.api_key,
             'api_key_secret': self.api_secret,
