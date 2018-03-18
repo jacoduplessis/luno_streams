@@ -18,6 +18,8 @@ setup(
     install_requires=[
         'websockets'
     ],
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest'],
     entry_points={'console_scripts': [
         'luno_streams=luno_streams.cli:main',
     ]},
