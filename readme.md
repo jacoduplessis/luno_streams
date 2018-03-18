@@ -1,5 +1,8 @@
 # Luno Streams
 
+[![Build Status](https://travis-ci.org/jacoduplessis/luno_streams.svg?branch=master)](https://travis-ci.org/jacoduplessis/luno_streams)
+
+
 Python library to connect to the [Luno Streaming API](https://www.luno.com/en/api#streaming) with websockets. 
 
 Includes example app to replicate the Luno Exchange interface as well 
