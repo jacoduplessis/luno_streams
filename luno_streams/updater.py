@@ -9,8 +9,10 @@ import websockets
 
 logger = logging.getLogger('luno_streams')
 
+
 class BackoffException(Exception):
     pass
+
 
 class Updater:
 
@@ -23,7 +25,7 @@ class Updater:
         self.asks = {}
         self.websocket = None
         self.hooks = hooks or []
-        self.time_last_connection_attempt = None  # used for backoff
+        self.time_last_connection_attempt = None
 
     def check_backoff(self):
         if self.time_last_connection_attempt is not None:
