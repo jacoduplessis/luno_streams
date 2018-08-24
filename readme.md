@@ -43,7 +43,7 @@ to store results and proxy to other websockets.
 
 ## Hooks
 
-The `Updater` accepts a `hooks` parameter - a list of functions or coroutines that will be called
+The `Updater` accepts a `hooks` parameter - a list of functions (can be async) that will be called
 whenever the order book is updated. This is where you will probably add some code to store
 the data in redis or do some calculations and make some API calls. 
 
@@ -108,3 +108,13 @@ It is highly recommended to use the `--depth` option, usually somewhere between 
 An example app made with [Vue](https://vuejs.org) is included. See `app.html` in the source code
 and run it using the `--app` flag when running the server. This will serve the `app.html` in a 
 new thread.
+
+## Running tests and contributing
+
+```
+git clone git@github.com:jacoduplessis/luno_streams.git
+cd luno_streams
+pip install -e .
+pip install pytest
+python setup.py test
+```
