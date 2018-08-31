@@ -3,6 +3,6 @@ python:
   - "3.6"
 script:
   - pip install .
-  - python setup.py test
+  - python -m unittest discover tests
 notifications:
   email: false
