@@ -55,6 +55,10 @@ Each hook will receive two arguments:
 Scan the list of trades if you need to determine whether your order was fulfilled without making 
 an API call. Pro tip: if you have an open order, you are a `maker`.
 
+Please keep in mind that if you add synchronous/non-async hooks, you will block the processing of updates from the API
+until your code has finished running. It is advised to either a) use async hooks or b) store the data in
+a fast database like redis and then connect to it from another process. Redis pubsub can be very useful here. 
+
 ## Order Book Structure
 
 An order book is a dict with two keys: `bids` and `asks`. Each side contains a list
@@ -115,6 +119,6 @@ new thread.
 git clone git@github.com:jacoduplessis/luno_streams.git
 cd luno_streams
 pip install -e .
-pip install pytest
+python -m unittest discover tests
 python setup.py test
 ```
