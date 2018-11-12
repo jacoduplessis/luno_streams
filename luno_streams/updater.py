@@ -82,6 +82,16 @@ class Updater:
 
         self.sequence = new_sequence
 
+        trades = self.process_message(data)
+
+        for fn in self.hooks:
+            args = [self.consolidated_order_book, trades]
+            if asyncio.iscoroutinefunction(fn):
+                await fn(*args)
+            else:
+                fn(*args)
+
+    def process_message(self, data):
         if data['delete_update']:
             order_id = data['delete_update']['order_id']
 
@@ -116,12 +126,7 @@ class Updater:
                     self.update_existing_order(key='asks', update=update)
                     trades.append({**update, 'type': 'buy'})
 
-        for fn in self.hooks:
-            args = [self.consolidated_order_book, trades]
-            if asyncio.iscoroutinefunction(fn):
-                await fn(*args)
-            else:
-                fn(*args)
+        return trades
 
     def update_existing_order(self, key, update):
         book = getattr(self, key)
