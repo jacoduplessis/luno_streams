@@ -63,12 +63,17 @@ class Updater:
         logger.info(f'[{self.pair_code}] Initial state received.')
 
     async def run(self):
-        await self.connect()
-        async for message in self.websocket:
-            if message == '""':
-                # keep alive
-                continue
-            await self.handle_message(message)
+        while True:
+            try:
+                await self.connect()
+                async for message in self.websocket:
+                    if message == '""':
+                        # keep alive
+                        continue
+                    await self.handle_message(message)
+            except (websockets.exceptions.ConnectionClosedError, websockets.exceptions.ConnectionClosedOK):
+                await self.websocket.close()
+                self.websocket = None
 
     async def handle_message(self, message):
         data = json.loads(message)
