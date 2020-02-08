@@ -1,3 +1,10 @@
+### 0.1.3
+
+**2020-02-08**
+
+Fix reference to `ws_client`.
+Add mock server for testing.
+
 ### 0.1.2
 
 **2018-08-24**
