@@ -125,12 +125,12 @@ pip install -e .
 
 Testing:
 
-Run mock server
+Run mock server 
 ```
-python test/mock_server
+python test/mock_server.py
 ```
 
-Run tests:
+and in a separate terminal run tests:
 
 ```
 python -m unittest discover tests
