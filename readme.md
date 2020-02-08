@@ -115,10 +115,23 @@ new thread.
 
 ## Running tests and contributing
 
+Setup:
+
 ```
 git clone git@github.com:jacoduplessis/luno_streams.git
 cd luno_streams
 pip install -e .
+```
+
+Testing:
+
+Run mock server
+```
+python test/mock_server
+```
+
+Run tests:
+
+```
 python -m unittest discover tests
-python setup.py test
 ```

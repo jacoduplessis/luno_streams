@@ -26,6 +26,7 @@ class Updater:
         self.websocket = None
         self.hooks = hooks or []
         self.time_last_connection_attempt = None
+        self.url = f'wss://ws.luno.com/api/1/stream/{pair_code}'
 
     def check_backoff(self):
         if self.time_last_connection_attempt is not None:
@@ -34,10 +35,9 @@ class Updater:
                 raise BackoffException()
 
     async def connect(self):
-
         if self.websocket is not None:  # reconnecting
             logger.info(f'[{self.pair_code}] Closing existing connection...')
-            await self.websocket.ws_client.close()
+            await self.websocket.close()
         try:
             self.check_backoff()
         except BackoffException:
@@ -46,9 +46,8 @@ class Updater:
             await asyncio.sleep(10)
         self.time_last_connection_attempt = time.time()
 
-        url = f'wss://ws.luno.com/api/1/stream/{self.pair_code}'
-        logger.info(f'[{self.pair_code}] Connecting to {url}...')
-        self.websocket = await websockets.connect(url)
+        logger.info(f'[{self.pair_code}] Connecting to {self.url}...')
+        self.websocket = await websockets.connect(self.url)
         # no error handling - if connection fails, let it raise websocket Exception
         await self.websocket.send(json.dumps({
             'api_key_id': self.api_key,
@@ -74,7 +73,7 @@ class Updater:
         data = json.loads(message)
         new_sequence = int(data['sequence'])
         if new_sequence != self.sequence + 1:
-            logger.warning(
+            logger.info(
                 f'[{self.pair_code}] Sequence broken: expected "{self.sequence+1}", received "{new_sequence}".'
             )
             logger.info(f'[{self.pair_code}] Reconnecting...')

@@ -1,8 +1,8 @@
 language: python
 python:
-  - "3.6"
+  - "3.7"
 script:
   - pip install .
-  - python -m unittest discover tests
+  - python -m unittest tests.test_updater
 notifications:
   email: false

@@ -92,7 +92,6 @@ class TestOrderBook(TestCase):
         self.assertDictEqual(updater.asks, expected_asks)
         self.assertListEqual(trades, expected_trades)
 
-
         # sell half of bid order
         message = {
             'create_update': {},
@@ -153,7 +152,6 @@ class TestOrderBook(TestCase):
         self.assertDictEqual(updater.asks, expected_asks)
         self.assertListEqual(trades, expected_trades)
 
-
         # order is placed that is partially filled
 
         # first add an existing bid
@@ -204,7 +202,6 @@ class TestOrderBook(TestCase):
         self.assertDictEqual(updater.bids, expected_bids)
         self.assertDictEqual(updater.asks, expected_asks)
         self.assertListEqual(trades, expected_trades)
-
 
 
 class TestBackoff(TestCase):
