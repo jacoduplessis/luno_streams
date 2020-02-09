@@ -1,3 +1,9 @@
+### 0.1.4
+
+**2020-02-09**
+
+Fix: Use uppercase pair code in URL.
+
 ### 0.1.3
 
 **2020-02-08**
