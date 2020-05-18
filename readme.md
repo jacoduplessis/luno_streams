@@ -113,6 +113,40 @@ An example app made with [Vue](https://vuejs.org) is included. See `app.html` in
 and run it using the `--app` flag when running the server. This will serve the `app.html` in a 
 new thread.
 
+## Example: retrieving multiple pairs
+
+```python3
+import asyncio
+from luno_strams import Updater
+
+pairs = {'XBTZAR', 'ETHXBT'}
+
+def xbt_hook(order_book, trades):
+    pass
+
+def eth_hook(order_book, trades):
+    pass
+
+hooks = {
+    'XBTZAR': [xbt_hook],
+    'ETHXBT: [eth_hook],
+}
+
+async def run_updater(code):
+
+    updater = Updater(
+        pair_code=code,
+        api_key=options.api_key,
+        api_secret=options.api_secret,
+        hooks=hooks.get(code),
+    )
+    await updater.run()
+
+loop = asyncio.get_event_loop()
+tasks = [loop.create_task(run_updater(code)) for code in pairs]
+loop.run_until_complete(asyncio.gather(*tasks))
+```
+
 ## Running tests and contributing
 
 Setup:
