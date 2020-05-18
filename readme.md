@@ -119,7 +119,9 @@ new thread.
 import asyncio
 from luno_strams import Updater
 
-pairs = {'XBTZAR', 'ETHXBT'}
+API_KEY, API_SECRET = '123', 'ABC'
+
+pairs = {'XBTZAR', 'ETHZAR'}
 
 def xbt_hook(order_book, trades):
     pass
@@ -129,15 +131,15 @@ def eth_hook(order_book, trades):
 
 hooks = {
     'XBTZAR': [xbt_hook],
-    'ETHXBT: [eth_hook],
+    'ETHZAR': [eth_hook],
 }
 
 async def run_updater(code):
 
     updater = Updater(
         pair_code=code,
-        api_key=options.api_key,
-        api_secret=options.api_secret,
+        api_key=API_KEY,
+        api_secret=API_SECRET,
         hooks=hooks.get(code),
     )
     await updater.run()

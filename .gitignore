@@ -94,3 +94,5 @@ ENV/
 .idea/
 
 .pytest_cache/
+
+sandbox.py
