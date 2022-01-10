@@ -1,3 +1,10 @@
+### 0.1.5
+
+**2022-01-10**
+
+Update the max payload size for the websocket client to accommodate growing order book sizes.
+Pin minimum version of websockets library to >= 10 and update tests
+
 ### 0.1.4
 
 **2020-02-09**

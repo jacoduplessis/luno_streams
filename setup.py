@@ -10,10 +10,10 @@ setup(
     package_data={
       'luno_streams': ['app.html']
     },
-    version='0.1.4',
+    version='0.1.5',
     packages=['luno_streams'],
     install_requires=[
-        'websockets'
+        'websockets>=10'
     ],
     entry_points={'console_scripts': [
         'luno_streams=luno_streams.cli:main',
