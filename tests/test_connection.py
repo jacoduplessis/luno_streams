@@ -1,9 +1,10 @@
 import asyncio
 from unittest import TestCase
+
+from websockets.connection import State
+
 from luno_streams import Updater
-from websockets.protocol import State
 import logging
-from concurrent import futures
 
 logging.getLogger('luno_streams').addHandler(logging.StreamHandler())
 
@@ -20,7 +21,7 @@ class TestConnection(TestCase):
         updater = Updater('XBTZAR', 'key', 'secret', [hook])
         updater.url = 'ws://localhost:8765/simple_updates'
 
-        with self.assertRaises(futures.TimeoutError):
+        with self.assertRaises(asyncio.exceptions.TimeoutError):
             asyncio.run(asyncio.wait_for(updater.run(), 5))
 
         self.assertEqual(num_updates, 4)

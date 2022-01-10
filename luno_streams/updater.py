@@ -6,6 +6,7 @@ from collections import defaultdict
 from decimal import Decimal
 
 import websockets
+from websockets.client import connect as websocket_connect
 
 logger = logging.getLogger('luno_streams')
 
@@ -47,7 +48,7 @@ class Updater:
         self.time_last_connection_attempt = time.time()
 
         logger.info(f'[{self.pair_code}] Connecting to {self.url}...')
-        self.websocket = await websockets.connect(self.url)
+        self.websocket = await websocket_connect(self.url, max_size=2**21)
         # no error handling - if connection fails, let it raise websocket Exception
         await self.websocket.send(json.dumps({
             'api_key_id': self.api_key,
